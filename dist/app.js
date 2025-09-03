@@ -10,7 +10,7 @@ const income_routes_1 = __importDefault(require("./budget-tracker/income/income.
 const expense_routes_1 = __importDefault(require("./budget-tracker/expense/expense.routes"));
 const summary_routes_1 = __importDefault(require("./budget-tracker/summary/summary.routes"));
 const study_routes_1 = __importDefault(require("./study_planner/study.routes"));
-const question_routes_1 = __importDefault(require("./Exam Q&A/question.routes"));
+const question_routes_1 = __importDefault(require("./ExamQ&A/question.routes"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());

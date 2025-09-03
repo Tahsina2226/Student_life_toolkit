@@ -5,7 +5,7 @@ import incomeRoutes from "./budget-tracker/income/income.routes";
 import expenseRoutes from "./budget-tracker/expense/expense.routes";
 import summaryRoutes from "./budget-tracker/summary/summary.routes";
 import studyRoutes from "./study_planner/study.routes";
-import questionRoutes from "./Exam Q&A/question.routes";
+import questionRoutes from "./ExamQ&A/question.routes";
 const app = express();
 
 app.use(cors());

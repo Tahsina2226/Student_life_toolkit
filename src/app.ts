@@ -4,7 +4,7 @@ import classRoutes from "../src/class_shedule/shedule.route";
 import incomeRoutes from "./budget-tracker/income/income.routes";
 import expenseRoutes from "./budget-tracker/expense/expense.routes";
 import summaryRoutes from "./budget-tracker/summary/summary.routes";
-
+import studyRoutes from "./study_planner/study.routes";
 import questionRoutes from "./Exam Q&A/question.routes";
 const app = express();
 
@@ -20,6 +20,7 @@ app.use("/api/income", incomeRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/summary", summaryRoutes);
 app.use("/api/questions", questionRoutes);
+app.use("/api/study", studyRoutes);
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res

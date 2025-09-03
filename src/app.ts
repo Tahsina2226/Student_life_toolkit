@@ -5,6 +5,7 @@ import incomeRoutes from "./budget-tracker/income/income.routes";
 import expenseRoutes from "./budget-tracker/expense/expense.routes";
 import summaryRoutes from "./budget-tracker/summary/summary.routes";
 
+import questionRoutes from "./Exam Q&A/question.routes";
 const app = express();
 
 app.use(cors());
@@ -18,6 +19,7 @@ app.use("/api/classes", classRoutes);
 app.use("/api/income", incomeRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/summary", summaryRoutes);
+app.use("/api/questions", questionRoutes);
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res

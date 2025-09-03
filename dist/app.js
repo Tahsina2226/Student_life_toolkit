@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const shedule_route_1 = __importDefault(require("../src/class_shedule/shedule.route"));
-const income_routes_1 = __importDefault(require("./budget-tracker/income/income.routes"));
-const expense_routes_1 = __importDefault(require("./budget-tracker/expense/expense.routes"));
-const summary_routes_1 = __importDefault(require("./budget-tracker/summary/summary.routes"));
-const study_routes_1 = __importDefault(require("./study_planner/study.routes"));
+const shedule_route_1 = __importDefault(require("./classShedule/shedule.route"));
+const income_routes_1 = __importDefault(require("./budgetTracker/income/income.routes"));
+const expense_routes_1 = __importDefault(require("./budgetTracker/expense/expense.routes"));
+const summary_routes_1 = __importDefault(require("./budgetTracker/summary/summary.routes"));
+const study_routes_1 = __importDefault(require("./studyPlanner/study.routes"));
 const question_routes_1 = __importDefault(require("./ExamQ&A/question.routes"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());

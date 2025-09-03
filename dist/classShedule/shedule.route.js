@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const shedule_controller_1 = require("./shedule.controller");
+const router = (0, express_1.Router)();
+router.get("/", shedule_controller_1.getClasses);
+router.get("/:id", shedule_controller_1.getClassById);
+router.post("/", shedule_controller_1.addClass);
+router.put("/:id", shedule_controller_1.updateClass);
+router.delete("/:id", shedule_controller_1.deleteClass);
+exports.default = router;

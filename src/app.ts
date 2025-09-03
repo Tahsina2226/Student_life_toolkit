@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
-import classRoutes from "../src/class_shedule/shedule.route";
-import incomeRoutes from "./budget-tracker/income/income.routes";
-import expenseRoutes from "./budget-tracker/expense/expense.routes";
-import summaryRoutes from "./budget-tracker/summary/summary.routes";
-import studyRoutes from "./study_planner/study.routes";
+import classRoutes from "./classShedule/shedule.route";
+import incomeRoutes from "./budgetTracker/income/income.routes";
+import expenseRoutes from "./budgetTracker/expense/expense.routes";
+import summaryRoutes from "./budgetTracker/summary/summary.routes";
+import studyRoutes from "./studyPlanner/study.routes";
 import questionRoutes from "./ExamQ&A/question.routes";
 const app = express();
 

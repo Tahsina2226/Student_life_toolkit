@@ -1,7 +1,7 @@
 {
   "name": "ts-class-schedule",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon --watch \"src/**/*.ts\" --exec \"npx ts-node\" src/server.ts",
     "build": "tsc",

@@ -3,18 +3,11 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IClass extends Document {
   subject: string;
   instructor: string;
-  day:
-    | "Monday"
-    | "Tuesday"
-    | "Wednesday"
-    | "Thursday"
-    | "Friday"
-    | "Saturday"
-    | "Sunday";
+  day: string;
   startTime: string;
   endTime: string;
   color: string;
-  userId: mongoose.Types.ObjectId;
+  userId: string;
 }
 
 const classSchema: Schema<IClass> = new Schema(
@@ -23,7 +16,6 @@ const classSchema: Schema<IClass> = new Schema(
     instructor: { type: String, required: true },
     day: {
       type: String,
-      required: true,
       enum: [
         "Monday",
         "Tuesday",
@@ -33,11 +25,12 @@ const classSchema: Schema<IClass> = new Schema(
         "Saturday",
         "Sunday",
       ],
+      required: true,
     },
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
     color: { type: String, default: "#4ade80" },
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    userId: { type: String, required: true },
   },
   { timestamps: true }
 );

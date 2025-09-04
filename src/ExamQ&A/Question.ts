@@ -1,26 +1,27 @@
+import mongoose, { Document, Schema } from "mongoose";
 
-import { Schema, model } from "mongoose";
-
-export interface Question {
-  questionText: string;
-  options?: string[]; 
-  answer: string | boolean;
-  type: "mcq" | "short" | "truefalse";
+export interface IQuestion extends Document {
+  question: string;
+  type: "MCQ" | "True/False" | "Short Answer";
+  options?: string[];
+  answer: string;
   difficulty: "easy" | "medium" | "hard";
-  createdAt?: Date;
 }
 
-const questionSchema = new Schema<Question>({
-  questionText: { type: String, required: true },
+const QuestionSchema: Schema = new Schema({
+  question: { type: String, required: true },
+  type: {
+    type: String,
+    enum: ["MCQ", "True/False", "Short Answer"],
+    required: true,
+  },
   options: { type: [String], default: [] },
-  answer: { type: Schema.Types.Mixed, required: true },
-  type: { type: String, enum: ["mcq", "short", "truefalse"], required: true },
+  answer: { type: String, required: true },
   difficulty: {
     type: String,
     enum: ["easy", "medium", "hard"],
     required: true,
   },
-  createdAt: { type: Date, default: Date.now },
 });
 
-export default model<Question>("Question", questionSchema);
+export default mongoose.model<IQuestion>("Question", QuestionSchema);

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
-  addStudyPlan,
-  getStudyPlans,
+  createStudyPlan,
+  getAllStudyPlans,
   getStudyPlanById,
   updateStudyPlan,
   deleteStudyPlan,
@@ -11,16 +11,12 @@ import {
 
 const router = Router();
 
-router.post("/", addStudyPlan);
-router.get("/", getStudyPlans);
+router.post("/", createStudyPlan);
+router.get("/", getAllStudyPlans);
+router.get("/schedule/:day", getScheduleByDay);
 router.get("/:id", getStudyPlanById);
 router.put("/:id", updateStudyPlan);
 router.delete("/:id", deleteStudyPlan);
-
-// mark complete
 router.put("/:id/complete", markComplete);
-
-// get schedule for a day
-router.get("/schedule/:day", getScheduleByDay);
 
 export default router;

@@ -1,164 +1,164 @@
 import { Request, Response } from "express";
 import StudyPlan from "./study";
 
-const isValidTime = (t?: string) => {
-  if (!t) return false;
-  return /^([01]\d|2[0-3]):([0-5]\d)$/.test(t);
-};
+const isValidTime = (time: string) => /^([0-1]\d|2[0-3]):([0-5]\d)$/.test(time);
 
-export const addStudyPlan = async (req: Request, res: Response) => {
+export const createStudyPlan = async (req: Request, res: Response) => {
   try {
     const {
       subject,
       topic,
       priority,
       deadline,
-      daySlot,
+      day,
       startTime,
-      endTime,
       durationMinutes,
-      notes,
     } = req.body;
 
-    if (!subject || !priority) {
-      return res
-        .status(400)
-        .json({ message: "subject and priority are required" });
+    if (
+      !subject ||
+      !topic ||
+      !priority ||
+      !deadline ||
+      !day ||
+      !startTime ||
+      durationMinutes === undefined
+    ) {
+      return res.status(400).json({ message: "All fields are required." });
     }
+
     if (!["low", "medium", "high"].includes(priority)) {
       return res
         .status(400)
-        .json({ message: "priority must be one of 'low', 'medium', 'high'" });
-    }
-    if (
-      (startTime && !isValidTime(startTime)) ||
-      (endTime && !isValidTime(endTime))
-    ) {
-      return res
-        .status(400)
-        .json({ message: "startTime/endTime must be in HH:MM 24-hour format" });
-    }
-    if (durationMinutes && durationMinutes < 0) {
-      return res.status(400).json({ message: "durationMinutes must be >= 0" });
+        .json({ message: "Priority must be low, medium, or high." });
     }
 
-    const plan = await StudyPlan.create({
+    if (!isValidTime(startTime)) {
+      return res.status(400).json({ message: "Invalid time format (HH:MM)." });
+    }
+
+    if (durationMinutes < 0) {
+      return res
+        .status(400)
+        .json({ message: "Duration must be zero or positive." });
+    }
+
+    const newPlan = new StudyPlan({
       subject,
       topic,
       priority,
-      deadline: deadline ? new Date(deadline) : undefined,
-      daySlot,
+      deadline,
+      day,
       startTime,
-      endTime,
       durationMinutes,
-      notes,
     });
 
-    res.status(201).json(plan);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    const savedPlan = await newPlan.save();
+    res.status(201).json(savedPlan);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };
 
-export const getStudyPlans = async (req: Request, res: Response) => {
+export const getAllStudyPlans = async (_req: Request, res: Response) => {
   try {
-    const { subject, priority, daySlot, completed, beforeDeadline } = req.query;
-    const filter: any = {};
-
-    if (subject) filter.subject = subject;
-    if (priority) filter.priority = priority;
-    if (daySlot) filter.daySlot = daySlot;
-    if (completed !== undefined) filter.completed = completed === "true";
-    if (beforeDeadline)
-      filter.deadline = { $lte: new Date(String(beforeDeadline)) };
-
-    const plans = await StudyPlan.find(filter).sort({
-      priority: -1,
-      deadline: 1,
-      createdAt: -1,
-    });
-    res.status(200).json(plans);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    const plans = await StudyPlan.find().sort({ createdAt: -1 });
+    res.json(plans);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const getStudyPlanById = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const plan = await StudyPlan.findById(id);
-    if (!plan) return res.status(404).json({ message: "Plan not found" });
-    res.status(200).json(plan);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    const plan = await StudyPlan.findById(req.params.id);
+    if (!plan)
+      return res.status(404).json({ message: "Study plan not found." });
+    res.json(plan);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const updateStudyPlan = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
     const updates = req.body;
 
     if (
       updates.priority &&
       !["low", "medium", "high"].includes(updates.priority)
     ) {
-      return res.status(400).json({ message: "Invalid priority value" });
-    }
-    if (
-      (updates.startTime && !isValidTime(updates.startTime)) ||
-      (updates.endTime && !isValidTime(updates.endTime))
-    ) {
       return res
         .status(400)
-        .json({ message: "Invalid time format for startTime/endTime" });
+        .json({ message: "Priority must be low, medium, or high." });
     }
-    if (updates.durationMinutes && updates.durationMinutes < 0) {
-      return res.status(400).json({ message: "durationMinutes must be >= 0" });
-    }
-    if (updates.deadline) updates.deadline = new Date(updates.deadline);
 
-    const plan = await StudyPlan.findByIdAndUpdate(id, updates, { new: true });
-    if (!plan) return res.status(404).json({ message: "Plan not found" });
-    res.status(200).json(plan);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    if (updates.startTime && !isValidTime(updates.startTime)) {
+      return res.status(400).json({ message: "Invalid time format (HH:MM)." });
+    }
+
+    if (updates.durationMinutes !== undefined && updates.durationMinutes < 0) {
+      return res
+        .status(400)
+        .json({ message: "Duration must be zero or positive." });
+    }
+
+    if (updates.deadline) {
+      const d = new Date(updates.deadline);
+      if (isNaN(d.getTime())) {
+        return res.status(400).json({ message: "Invalid deadline date." });
+      }
+      updates.deadline = d;
+    }
+
+    const updatedPlan = await StudyPlan.findByIdAndUpdate(
+      req.params.id,
+      updates,
+      { new: true }
+    );
+    if (!updatedPlan)
+      return res.status(404).json({ message: "Study plan not found." });
+
+    res.json(updatedPlan);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const deleteStudyPlan = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    await StudyPlan.findByIdAndDelete(id);
-    res.status(200).json({ message: "Study plan deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    const deletedPlan = await StudyPlan.findByIdAndDelete(req.params.id);
+    if (!deletedPlan)
+      return res.status(404).json({ message: "Study plan not found." });
+    res.json({ message: "Study plan deleted successfully." });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const markComplete = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
     const plan = await StudyPlan.findByIdAndUpdate(
-      id,
+      req.params.id,
       { completed: true },
       { new: true }
     );
-    if (!plan) return res.status(404).json({ message: "Plan not found" });
-    res.status(200).json(plan);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    if (!plan)
+      return res.status(404).json({ message: "Study plan not found." });
+    res.json(plan);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const getScheduleByDay = async (req: Request, res: Response) => {
   try {
     const { day } = req.params;
-    const plans = await StudyPlan.find({ daySlot: day, completed: false }).sort(
-      { startTime: 1 }
-    );
-    res.status(200).json(plans);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    const plans = await StudyPlan.find({ day, completed: false }).sort({
+      startTime: 1,
+    });
+    res.json(plans);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };

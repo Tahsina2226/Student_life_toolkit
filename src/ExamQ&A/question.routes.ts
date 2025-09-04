@@ -1,17 +1,16 @@
-// routes/question.routes.ts
 import { Router } from "express";
 import {
-  addQuestion,
   getQuestions,
+  createQuestion,
+  updateQuestion,
   deleteQuestion,
-  generateRandomQuestion,
 } from "./question.controller";
 
 const router = Router();
 
-router.post("/", addQuestion);
 router.get("/", getQuestions);
-router.get("/random", generateRandomQuestion);
+router.post("/", createQuestion);
+router.put("/:id", updateQuestion);
 router.delete("/:id", deleteQuestion);
 
 export default router;

@@ -1,33 +1,31 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-export type Priority = "low" | "medium" | "high";
-
-export interface StudyPlan {
+export interface StudyPlan extends Document {
   subject: string;
-  topic?: string;
-  priority: Priority;
-  deadline?: Date;
-  daySlot?: string;
-  startTime?: string;
-  endTime?: string;
-  durationMinutes?: number;
-  notes?: string;
-  completed?: boolean;
-  createdAt?: Date;
+  topic: string;
+  priority: "low" | "medium" | "high";
+  deadline: Date;
+  day: string;
+  startTime: string;
+  durationMinutes: number;
+  completed: boolean;
+  createdAt: Date;
 }
 
-const studyPlanSchema = new Schema<StudyPlan>({
-  subject: { type: String, required: true, trim: true },
-  topic: { type: String, trim: true, default: "" },
-  priority: { type: String, enum: ["low", "medium", "high"], required: true },
-  deadline: { type: Date },
-  daySlot: { type: String, trim: true },
-  startTime: { type: String, trim: true },
-  endTime: { type: String, trim: true },
-  durationMinutes: { type: Number, min: 0 },
-  notes: { type: String, default: "" },
+const StudyPlanSchema: Schema = new Schema({
+  subject: { type: String, required: true },
+  topic: { type: String, required: true },
+  priority: {
+    type: String,
+    enum: ["low", "medium", "high"],
+    required: true,
+  },
+  deadline: { type: Date, required: true },
+  day: { type: String, required: true },
+  startTime: { type: String, required: true }, 
+  durationMinutes: { type: Number, required: true },
   completed: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 
-export default model<StudyPlan>("StudyPlan", studyPlanSchema);
+export default mongoose.model<StudyPlan>("StudyPlan", StudyPlanSchema);

@@ -12,153 +12,141 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getScheduleByDay = exports.markComplete = exports.deleteStudyPlan = exports.updateStudyPlan = exports.getStudyPlanById = exports.getStudyPlans = exports.addStudyPlan = void 0;
+exports.getScheduleByDay = exports.markComplete = exports.deleteStudyPlan = exports.updateStudyPlan = exports.getStudyPlanById = exports.getAllStudyPlans = exports.createStudyPlan = void 0;
 const study_1 = __importDefault(require("./study"));
-const isValidTime = (t) => {
-    if (!t)
-        return false;
-    return /^([01]\d|2[0-3]):([0-5]\d)$/.test(t);
-};
-const addStudyPlan = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const isValidTime = (time) => /^([0-1]\d|2[0-3]):([0-5]\d)$/.test(time);
+const createStudyPlan = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { subject, topic, priority, deadline, daySlot, startTime, endTime, durationMinutes, notes, } = req.body;
-        if (!subject || !priority) {
-            return res
-                .status(400)
-                .json({ message: "subject and priority are required" });
+        const { subject, topic, priority, deadline, day, startTime, durationMinutes, } = req.body;
+        if (!subject ||
+            !topic ||
+            !priority ||
+            !deadline ||
+            !day ||
+            !startTime ||
+            durationMinutes === undefined) {
+            return res.status(400).json({ message: "All fields are required." });
         }
         if (!["low", "medium", "high"].includes(priority)) {
             return res
                 .status(400)
-                .json({ message: "priority must be one of 'low', 'medium', 'high'" });
+                .json({ message: "Priority must be low, medium, or high." });
         }
-        if ((startTime && !isValidTime(startTime)) ||
-            (endTime && !isValidTime(endTime))) {
+        if (!isValidTime(startTime)) {
+            return res.status(400).json({ message: "Invalid time format (HH:MM)." });
+        }
+        if (durationMinutes < 0) {
             return res
                 .status(400)
-                .json({ message: "startTime/endTime must be in HH:MM 24-hour format" });
+                .json({ message: "Duration must be zero or positive." });
         }
-        if (durationMinutes && durationMinutes < 0) {
-            return res.status(400).json({ message: "durationMinutes must be >= 0" });
-        }
-        const plan = yield study_1.default.create({
+        const newPlan = new study_1.default({
             subject,
             topic,
             priority,
-            deadline: deadline ? new Date(deadline) : undefined,
-            daySlot,
+            deadline,
+            day,
             startTime,
-            endTime,
             durationMinutes,
-            notes,
         });
-        res.status(201).json(plan);
+        const savedPlan = yield newPlan.save();
+        res.status(201).json(savedPlan);
     }
     catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        res.status(500).json({ message: error.message });
     }
 });
-exports.addStudyPlan = addStudyPlan;
-const getStudyPlans = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createStudyPlan = createStudyPlan;
+const getAllStudyPlans = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { subject, priority, daySlot, completed, beforeDeadline } = req.query;
-        const filter = {};
-        if (subject)
-            filter.subject = subject;
-        if (priority)
-            filter.priority = priority;
-        if (daySlot)
-            filter.daySlot = daySlot;
-        if (completed !== undefined)
-            filter.completed = completed === "true";
-        if (beforeDeadline)
-            filter.deadline = { $lte: new Date(String(beforeDeadline)) };
-        const plans = yield study_1.default.find(filter).sort({
-            priority: -1,
-            deadline: 1,
-            createdAt: -1,
-        });
-        res.status(200).json(plans);
+        const plans = yield study_1.default.find().sort({ createdAt: -1 });
+        res.json(plans);
     }
     catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        res.status(500).json({ message: error.message });
     }
 });
-exports.getStudyPlans = getStudyPlans;
+exports.getAllStudyPlans = getAllStudyPlans;
 const getStudyPlanById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const plan = yield study_1.default.findById(id);
+        const plan = yield study_1.default.findById(req.params.id);
         if (!plan)
-            return res.status(404).json({ message: "Plan not found" });
-        res.status(200).json(plan);
+            return res.status(404).json({ message: "Study plan not found." });
+        res.json(plan);
     }
     catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        res.status(500).json({ message: error.message });
     }
 });
 exports.getStudyPlanById = getStudyPlanById;
 const updateStudyPlan = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
         const updates = req.body;
         if (updates.priority &&
             !["low", "medium", "high"].includes(updates.priority)) {
-            return res.status(400).json({ message: "Invalid priority value" });
-        }
-        if ((updates.startTime && !isValidTime(updates.startTime)) ||
-            (updates.endTime && !isValidTime(updates.endTime))) {
             return res
                 .status(400)
-                .json({ message: "Invalid time format for startTime/endTime" });
+                .json({ message: "Priority must be low, medium, or high." });
         }
-        if (updates.durationMinutes && updates.durationMinutes < 0) {
-            return res.status(400).json({ message: "durationMinutes must be >= 0" });
+        if (updates.startTime && !isValidTime(updates.startTime)) {
+            return res.status(400).json({ message: "Invalid time format (HH:MM)." });
         }
-        if (updates.deadline)
-            updates.deadline = new Date(updates.deadline);
-        const plan = yield study_1.default.findByIdAndUpdate(id, updates, { new: true });
-        if (!plan)
-            return res.status(404).json({ message: "Plan not found" });
-        res.status(200).json(plan);
+        if (updates.durationMinutes !== undefined && updates.durationMinutes < 0) {
+            return res
+                .status(400)
+                .json({ message: "Duration must be zero or positive." });
+        }
+        if (updates.deadline) {
+            const d = new Date(updates.deadline);
+            if (isNaN(d.getTime())) {
+                return res.status(400).json({ message: "Invalid deadline date." });
+            }
+            updates.deadline = d;
+        }
+        const updatedPlan = yield study_1.default.findByIdAndUpdate(req.params.id, updates, { new: true });
+        if (!updatedPlan)
+            return res.status(404).json({ message: "Study plan not found." });
+        res.json(updatedPlan);
     }
     catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        res.status(500).json({ message: error.message });
     }
 });
 exports.updateStudyPlan = updateStudyPlan;
 const deleteStudyPlan = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        yield study_1.default.findByIdAndDelete(id);
-        res.status(200).json({ message: "Study plan deleted successfully" });
+        const deletedPlan = yield study_1.default.findByIdAndDelete(req.params.id);
+        if (!deletedPlan)
+            return res.status(404).json({ message: "Study plan not found." });
+        res.json({ message: "Study plan deleted successfully." });
     }
     catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        res.status(500).json({ message: error.message });
     }
 });
 exports.deleteStudyPlan = deleteStudyPlan;
 const markComplete = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const plan = yield study_1.default.findByIdAndUpdate(id, { completed: true }, { new: true });
+        const plan = yield study_1.default.findByIdAndUpdate(req.params.id, { completed: true }, { new: true });
         if (!plan)
-            return res.status(404).json({ message: "Plan not found" });
-        res.status(200).json(plan);
+            return res.status(404).json({ message: "Study plan not found." });
+        res.json(plan);
     }
     catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        res.status(500).json({ message: error.message });
     }
 });
 exports.markComplete = markComplete;
 const getScheduleByDay = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { day } = req.params;
-        const plans = yield study_1.default.find({ daySlot: day, completed: false }).sort({ startTime: 1 });
-        res.status(200).json(plans);
+        const plans = yield study_1.default.find({ day, completed: false }).sort({
+            startTime: 1,
+        });
+        res.json(plans);
     }
     catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        res.status(500).json({ message: error.message });
     }
 });
 exports.getScheduleByDay = getScheduleByDay;

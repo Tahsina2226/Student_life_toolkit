@@ -11,6 +11,8 @@ const expense_routes_1 = __importDefault(require("./budgetTracker/expense/expens
 const summary_routes_1 = __importDefault(require("./budgetTracker/summary/summary.routes"));
 const study_routes_1 = __importDefault(require("./studyPlanner/study.routes"));
 const question_routes_1 = __importDefault(require("./ExamQ&A/question.routes"));
+const auth_route_1 = __importDefault(require("./auth/auth.route"));
+const motivation_route_1 = __importDefault(require("./DailyAdvisor/motivation.route"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -23,6 +25,8 @@ app.use("/api/expenses", expense_routes_1.default);
 app.use("/api/summary", summary_routes_1.default);
 app.use("/api/questions", question_routes_1.default);
 app.use("/api/study", study_routes_1.default);
+app.use("/api/auth", auth_route_1.default);
+app.use("/api/motivation", motivation_route_1.default);
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res

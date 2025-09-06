@@ -39,7 +39,6 @@ const classSchema = new mongoose_1.Schema({
     instructor: { type: String, required: true },
     day: {
         type: String,
-        required: true,
         enum: [
             "Monday",
             "Tuesday",
@@ -49,10 +48,11 @@ const classSchema = new mongoose_1.Schema({
             "Saturday",
             "Sunday",
         ],
+        required: true,
     },
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
     color: { type: String, default: "#4ade80" },
-    userId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
+    userId: { type: String, required: true },
 }, { timestamps: true });
 exports.default = mongoose_1.default.model("Class", classSchema);

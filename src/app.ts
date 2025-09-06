@@ -7,6 +7,7 @@ import summaryRoutes from "./budgetTracker/summary/summary.routes";
 import studyRoutes from "./studyPlanner/study.routes";
 import questionRoutes from "./ExamQ&A/question.routes";
 import authRoutes from "./auth/auth.route";
+import motivationRoutes from "./DailyAdvisor/motivation.route";
 const app = express();
 
 app.use(cors());
@@ -23,6 +24,7 @@ app.use("/api/summary", summaryRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/study", studyRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/motivation", motivationRoutes);
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res

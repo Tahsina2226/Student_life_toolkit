@@ -1,10 +1,5 @@
 import { Router } from "express";
-import {
-  getClasses,
-  addClass,
-  updateClass,
-  deleteClass,
-} from "./shedule.controller";
+import { getClasses, addClass, updateClass, deleteClass } from "./shedule.controller";
 
 const router = Router();
 

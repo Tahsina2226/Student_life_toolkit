@@ -13,28 +13,13 @@ export const getClasses = async (req: Request, res: Response) => {
 };
 
 export const addClass = async (req: Request, res: Response) => {
-  const { subject, instructor, day, startTime, endTime, color, userId } =
-    req.body;
-
+  const { subject, instructor, day, startTime, endTime, color, userId } = req.body;
   if (!subject || !instructor || !day || !startTime || !endTime || !userId) {
     return res.status(400).json({ message: "All fields are required!" });
   }
-
-  if (startTime >= endTime)
-    return res
-      .status(400)
-      .json({ message: "Start time must be before end time!" });
-
+  if (startTime >= endTime) return res.status(400).json({ message: "Start time must be before end time!" });
   try {
-    const newClass: IClass = new Class({
-      subject,
-      instructor,
-      day,
-      startTime,
-      endTime,
-      color,
-      userId,
-    });
+    const newClass: IClass = new Class({ subject, instructor, day, startTime, endTime, color, userId });
     await newClass.save();
     res.status(201).json(newClass);
   } catch (err) {
@@ -44,9 +29,7 @@ export const addClass = async (req: Request, res: Response) => {
 
 export const updateClass = async (req: Request, res: Response) => {
   try {
-    const updatedClass = await Class.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const updatedClass = await Class.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedClass) return res.status(404).json({ message: "Class not found" });
     res.json(updatedClass);
   } catch (err) {

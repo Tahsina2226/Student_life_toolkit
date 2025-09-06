@@ -256,3 +256,60 @@ System.Threading.Channels.ChannelClosedException: The channel has been closed.
 2025-09-05 11:49:47.169 +06:00 [WRN] No ConfigurationItems have been defined, configuration won't surface any configuration from the client!
 2025-09-05 11:49:47.778 +06:00 [DBG] Finished: Routing Notification initialized in 1004ms
 2025-09-05 11:49:47.786 +06:00 [DBG] Finished: Processing notification initialized in 1023ms
+2025-09-05 15:17:46.570 +06:00 [INF] This only goes file...
+2025-09-05 15:18:02.430 +06:00 [INF] Foo
+2025-09-05 15:19:25.951 +06:00 [DBG] Finding descriptors for initialize
+2025-09-05 15:19:27.431 +06:00 [DBG] Queueing "Serial":initialize:0 request for processing
+2025-09-05 15:19:27.613 +06:00 [DBG] Starting: Processing request initialize 0
+2025-09-05 15:19:27.623 +06:00 [DBG] Starting: Routing Request (0) initialize
+2025-09-05 15:19:27.632 +06:00 [VRB] Converting params for Request (0) initialize to OmniSharp.Extensions.LanguageServer.Protocol.Models.InternalInitializeParams
+2025-09-05 15:19:27.644 +06:00 [VRB] Converting params for Notification initialize to OmniSharp.Extensions.LanguageServer.Protocol.Models.InternalInitializeParams
+2025-09-05 15:19:33.262 +06:00 [VRB] Response value was OmniSharp.Extensions.LanguageServer.Protocol.Models.InitializeResult
+2025-09-05 15:19:33.315 +06:00 [DBG] Finished: Routing Request (0) initialize in 5690ms
+2025-09-05 15:19:33.318 +06:00 [DBG] Finished: Processing request initialize 0 in 5698ms
+2025-09-05 15:21:57.132 +06:00 [DBG] Finding descriptors for initialized
+2025-09-05 15:21:57.161 +06:00 [DBG] Queueing "Serial":initialized request for processing
+2025-09-05 15:21:57.195 +06:00 [DBG] Starting: Processing notification initialized
+2025-09-05 15:21:57.198 +06:00 [DBG] Starting: Routing Notification initialized
+2025-09-05 15:21:57.200 +06:00 [VRB] Converting params for Notification initialized to OmniSharp.Extensions.LanguageServer.Protocol.Models.InitializedParams
+2025-09-05 15:21:57.400 +06:00 [WRN] No ConfigurationItems have been defined, configuration won't surface any configuration from the client!
+2025-09-05 15:21:57.566 +06:00 [DBG] Finished: Routing Notification initialized in 366ms
+2025-09-05 15:21:57.567 +06:00 [DBG] Finished: Processing notification initialized in 370ms
+2025-09-06 13:35:24.285 +06:00 [INF] This only goes file...
+2025-09-06 13:35:33.295 +06:00 [INF] Foo
+2025-09-06 13:36:39.869 +06:00 [DBG] Finding descriptors for initialize
+2025-09-06 13:36:40.840 +06:00 [DBG] Queueing "Serial":initialize:0 request for processing
+2025-09-06 13:36:40.960 +06:00 [DBG] Starting: Processing request initialize 0
+2025-09-06 13:36:40.962 +06:00 [DBG] Starting: Routing Request (0) initialize
+2025-09-06 13:36:40.968 +06:00 [VRB] Converting params for Request (0) initialize to OmniSharp.Extensions.LanguageServer.Protocol.Models.InternalInitializeParams
+2025-09-06 13:36:40.970 +06:00 [VRB] Converting params for Notification initialize to OmniSharp.Extensions.LanguageServer.Protocol.Models.InternalInitializeParams
+2025-09-06 13:36:44.315 +06:00 [VRB] Response value was OmniSharp.Extensions.LanguageServer.Protocol.Models.InitializeResult
+2025-09-06 13:36:44.347 +06:00 [DBG] Finished: Routing Request (0) initialize in 3384ms
+2025-09-06 13:36:44.349 +06:00 [DBG] Finished: Processing request initialize 0 in 3388ms
+2025-09-06 13:40:38.013 +06:00 [DBG] Finding descriptors for initialized
+2025-09-06 13:40:38.129 +06:00 [DBG] Queueing "Serial":initialized request for processing
+2025-09-06 13:40:38.198 +06:00 [DBG] Starting: Processing notification initialized
+2025-09-06 13:40:38.208 +06:00 [DBG] Starting: Routing Notification initialized
+2025-09-06 13:40:38.211 +06:00 [VRB] Converting params for Notification initialized to OmniSharp.Extensions.LanguageServer.Protocol.Models.InitializedParams
+2025-09-06 13:40:38.623 +06:00 [WRN] No ConfigurationItems have been defined, configuration won't surface any configuration from the client!
+2025-09-06 13:40:38.860 +06:00 [DBG] Finished: Routing Notification initialized in 649ms
+2025-09-06 13:40:38.862 +06:00 [DBG] Finished: Processing notification initialized in 662ms
+2025-09-06 16:12:15.405 +06:00 [INF] This only goes file...
+2025-09-06 16:12:20.317 +06:00 [INF] Foo
+2025-09-06 16:14:08.372 +06:00 [DBG] Finding descriptors for initialize
+2025-09-06 16:14:17.730 +06:00 [DBG] Queueing "Serial":initialize:0 request for processing
+2025-09-06 16:14:18.336 +06:00 [DBG] Starting: Processing request initialize 0
+2025-09-06 16:14:18.345 +06:00 [DBG] Starting: Routing Request (0) initialize
+2025-09-06 16:14:18.357 +06:00 [VRB] Converting params for Request (0) initialize to OmniSharp.Extensions.LanguageServer.Protocol.Models.InternalInitializeParams
+2025-09-06 16:14:18.404 +06:00 [VRB] Converting params for Notification initialize to OmniSharp.Extensions.LanguageServer.Protocol.Models.InternalInitializeParams
+2025-09-06 16:14:24.982 +06:00 [VRB] Response value was OmniSharp.Extensions.LanguageServer.Protocol.Models.InitializeResult
+2025-09-06 16:14:25.159 +06:00 [DBG] Finished: Routing Request (0) initialize in 6812ms
+2025-09-06 16:14:25.161 +06:00 [DBG] Finished: Processing request initialize 0 in 6823ms
+2025-09-06 16:15:46.319 +06:00 [DBG] Finding descriptors for initialized
+2025-09-06 16:15:46.332 +06:00 [DBG] Queueing "Serial":initialized request for processing
+2025-09-06 16:15:46.350 +06:00 [DBG] Starting: Processing notification initialized
+2025-09-06 16:15:46.352 +06:00 [DBG] Starting: Routing Notification initialized
+2025-09-06 16:15:46.353 +06:00 [VRB] Converting params for Notification initialized to OmniSharp.Extensions.LanguageServer.Protocol.Models.InitializedParams
+2025-09-06 16:15:46.498 +06:00 [WRN] No ConfigurationItems have been defined, configuration won't surface any configuration from the client!
+2025-09-06 16:15:46.633 +06:00 [DBG] Finished: Routing Notification initialized in 280ms
+2025-09-06 16:15:46.634 +06:00 [DBG] Finished: Processing notification initialized in 282ms
